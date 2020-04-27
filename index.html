@@ -1,27 +1,44 @@
-<html>
+// Copyright (c) 2019 ml5
+//
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
 
-<head>
-  <meta charset="UTF-8">
-  <title>Neural Network Pixel Prediction</title>
+/* ===
+ml5 Example
+CVAE example using p5.js
+=== */
+let cvae;
+let button;
+let dropdown;
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.sound.min.js"></script>
-  <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js" type="text/javascript"></script>
-</head>
+// function preload() {
+//   cvae = ml5.CVAE('model/quick_draw/manifest.json');
+// }
 
-<body>
-  <h1>Pixel Prediction</h1>
-  <script src="sketch.js"></script>
+function setup() {
+  createCanvas(200, 200);
+  // Create a new instance with pretrained model
+  cvae = ml5.CVAE('model/quick_draw/manifest.json', modelReady);
 
-  <p>
-    Training frequency: <input id="frequency" value="440"           />
-    <button id="addExample">add example</button>
-  </p>
-  <p>
-    <button id="train">train model</button>
-    Frequency prediction: <span id="prediction"></span>
-  </p>
-</body>
+  // Create a generate button
+  button = createButton('generate');
+  button.mousePressed(generateImage);
+  background(0);
+}
 
-</html>
+function gotImage(error, result) {
+  image(result.image, 0, 0, width, height);
+}
+
+function modelReady() {
+  // Create dropdown with all possible labels
+  dropdown = createSelect();
+  for (let label of cvae.labels) {
+    dropdown.option(label);
+  }
+}
+
+function generateImage() {
+  let label = dropdown.value();
+  cvae.generate(label, gotImage);
+}
