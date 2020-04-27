@@ -1,44 +1,52 @@
-// Copyright (c) 2019 ml5
-//
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Word2Vec example with p5.js. Using a pre-trained model on common English words.</title>
 
-/* ===
-ml5 Example
-CVAE example using p5.js
-=== */
-let cvae;
-let button;
-let dropdown;
+  <script src="p5.min.js"></script>
+  <script src="p5.dom.min.js"></script>
+  <script src="ml5.min.js" type="text/javascript"></script>
+  
 
-// function preload() {
-//   cvae = ml5.CVAE('model/quick_draw/manifest.json');
-// }
+  <style></style>
+</head>
 
-function setup() {
-  createCanvas(200, 200);
-  // Create a new instance with pretrained model
-  cvae = ml5.CVAE('model/quick_draw/manifest.json', modelReady);
+<body>
+  <h1>Word2Vec example with p5.js. Using a pre-trained model on common English words.</h1>
+  <p id="status">Loading Model...</p>
+  <div>
+    <div class="row">
+      <p>
+        <input type="text" value="tree" id="nearword">
+        <button id="submit" class="btn btn-primary">is nearest to ...</button>
+      </p>
+      <p id="results"></p>
+    </div>
 
-  // Create a generate button
-  button = createButton('generate');
-  button.mousePressed(generateImage);
-  background(0);
-}
+    <div class="row">
+      <p>
+        Between
+        <input type="text" value="car" id="between1"> and
+        <input type="text" value="tire" id="between2">
+        <button id="submit2" class="btn btn-primary">is ...</button>
+      </p>
+      <p id="results2"></p>
+    </div>
 
-function gotImage(error, result) {
-  image(result.image, 0, 0, width, height);
-}
+    <div class="row">
+      <p>
+        <input type="text" value="fruit" id="isto1"> is to
+        <input type="text" value="tree" id="isto2"> as
+        <input type="text" value="monkey" id="isto3">
+        <button id="submit3" class="btn btn-primary">is to ...</button>
+      </p>
+      <p id="results3"></p>
+    </div>
+  </div>
 
-function modelReady() {
-  // Create dropdown with all possible labels
-  dropdown = createSelect();
-  for (let label of cvae.labels) {
-    dropdown.option(label);
-  }
-}
+  <script src="sketch.js"></script>
 
-function generateImage() {
-  let label = dropdown.value();
-  cvae.generate(label, gotImage);
-}
+
+
+</body></html>
